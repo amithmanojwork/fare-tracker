@@ -54,15 +54,17 @@ def sparkline(prices, target):
     last_x = round((len(prices) - 1) * step, 1)
     last_y = y_for(prices[-1])
     tone = "good" if prices[-1] <= target else "watch"
+    fill_points = f"0,{height} {points} {last_x},{height}"
 
     return (
         f'<svg class="spark" viewBox="0 0 {width} {height}" '
         f'preserveAspectRatio="none" role="img" '
         f'aria-label="Price trend over the last {len(prices)} checks">'
+        f'<polygon points="{fill_points}" class="spark-fill" />'
         f'<line x1="0" y1="{target_y}" x2="{width}" y2="{target_y}" '
         f'class="spark-target" />'
         f'<polyline points="{points}" class="spark-line" />'
-        f'<circle cx="{last_x}" cy="{last_y}" r="3.5" class="dot dot--{tone}" />'
+        f'<circle cx="{last_x}" cy="{last_y}" r="4" class="dot dot--{tone}" />'
         f"</svg>"
     )
 
@@ -75,7 +77,7 @@ def build_card(route, rows, currency):
     if not history:
         return (
             f'<article class="route route--empty">'
-            f'<h2>{html.escape(route["label"])}</h2>'
+            f'<header class="route-head"><h2>{html.escape(route["label"])}</h2></header>'
             f'<p class="note">No readings yet. The first run fills this in.</p>'
             f"</article>"
         )
@@ -85,11 +87,11 @@ def build_card(route, rows, currency):
     delta = latest["price"] - prices[-2] if len(prices) > 1 else 0
 
     if best_row["price"] <= target:
-        state_label, tone = "Below target", "good"
+        state_label, tone = "Good Price", "good"
     elif best_row["price"] <= target * 1.15:
-        state_label, tone = "Close", "watch"
+        state_label, tone = "Almost There", "watch"
     else:
-        state_label, tone = "Holding high", "high"
+        state_label, tone = "Too Expensive", "high"
 
     latest_price = f"{currency} {round(latest['price']):,}"
     if delta < 0:
@@ -129,103 +131,165 @@ def build_card(route, rows, currency):
 
 STYLES = """
 :root {
-  --ink: #0e1a1c;
-  --panel: #142528;
-  --rule: #24393c;
-  --bone: #e6e2d6;
-  --dim: #8a9a99;
-  --good: #4fa87a;
-  --watch: #d9a441;
-  --high: #c0563f;
+  --bg: #eef1f8;
+  --card: #ffffff;
+  --card-border: #eef0f6;
+  --ink: #14161f;
+  --dim: #767b8c;
+  --faint: #a3a8b8;
+  --blue: #3467f0;
+  --blue-soft: #eaf0fe;
+  --good: #1fa971;
+  --good-soft: #e4f7ee;
+  --watch: #d99a1b;
+  --watch-soft: #fdf3de;
+  --high: #e1503c;
+  --high-soft: #fdeae7;
+  --shadow: 0 16px 34px -18px rgba(20, 30, 70, 0.28);
+  --radius: 22px;
 }
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  padding: 28px 18px 64px;
-  background: var(--ink);
-  color: var(--bone);
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  padding: 0 0 64px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Google Sans Flex", "Google Sans", system-ui, -apple-system, sans-serif;
   font-size: 15px;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
-.wrap { max-width: 560px; margin: 0 auto; }
-.masthead { border-bottom: 2px solid var(--rule); padding-bottom: 14px; margin-bottom: 8px; }
+.topbar {
+  height: 96px;
+  background: radial-gradient(120% 220% at 20% -40%, #3a4fb0 0%, #0e1442 60%, #060814 100%);
+  position: relative;
+  overflow: hidden;
+}
+.topbar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(1.5px 1.5px at 10% 30%, rgba(255,255,255,.55) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 35% 60%, rgba(255,255,255,.4) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 60% 20%, rgba(255,255,255,.5) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 80% 50%, rgba(255,255,255,.35) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 92% 75%, rgba(255,255,255,.5) 50%, transparent 51%);
+}
+.wrap {
+  max-width: 900px;
+  margin: -56px auto 0;
+  padding: 0 20px;
+  position: relative;
+}
+.masthead {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 26px 28px;
+  margin-bottom: 20px;
+}
 .masthead h1 {
-  font-family: "Archivo Narrow", system-ui, sans-serif;
+  font-family: "Google Sans Flex", "Google Sans", system-ui, sans-serif;
   font-weight: 700;
-  font-size: 30px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  font-size: 34px;
+  line-height: 1.1;
   margin: 0;
+  color: var(--ink);
 }
-.masthead p { margin: 6px 0 0; color: var(--dim); font-size: 13px; }
+.masthead p { margin: 8px 0 0; color: var(--dim); font-size: 13.5px; }
 .countdown {
-  font-family: "IBM Plex Mono", monospace;
-  color: var(--watch);
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-weight: 600;
+  font-size: 12.5px;
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
 }
 .route {
-  border-bottom: 1px solid var(--rule);
-  padding: 22px 0;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px 24px 22px;
 }
-.route-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.route--empty { display: flex; flex-direction: column; justify-content: center; min-height: 160px; }
+.route-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .route h2 {
-  font-family: "Archivo Narrow", system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 19px;
-  letter-spacing: 0.01em;
+  font-family: "Google Sans Flex", "Google Sans", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 1.25;
   margin: 0;
+  color: var(--ink);
 }
 .flag {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  padding: 3px 7px;
-  border: 1px solid currentColor;
+  padding: 5px 11px;
+  border-radius: 999px;
   white-space: nowrap;
 }
-.flag--good { color: var(--good); }
-.flag--watch { color: var(--watch); }
-.flag--high { color: var(--high); }
-.note { color: var(--dim); font-size: 13px; margin: 4px 0 0; }
-.figure { display: flex; align-items: baseline; gap: 8px; margin: 14px 0 12px; flex-wrap: wrap; }
+.flag--good { color: var(--good); background: var(--good-soft); }
+.flag--watch { color: var(--watch); background: var(--watch-soft); }
+.flag--high { color: var(--high); background: var(--high-soft); }
+.note { color: var(--dim); font-size: 13px; margin: 8px 0 0; }
+.figure { display: flex; align-items: baseline; gap: 8px; margin: 18px 0 14px; flex-wrap: wrap; }
 .figure .move { flex-basis: 100%; }
-.currency { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--dim); }
+.currency { font-size: 14px; font-weight: 600; color: var(--faint); }
 .price {
-  font-family: "Archivo Narrow", system-ui, sans-serif;
-  font-weight: 700;
-  font-size: 44px;
+  font-weight: 800;
+  font-size: 40px;
   line-height: 1;
+  letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
+  color: var(--ink);
 }
-.move { font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+.move { font-size: 12.5px; font-weight: 600; }
 .move--down { color: var(--good); }
 .move--up { color: var(--high); }
 .move--flat { color: var(--dim); }
-.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin: 0 0 16px; }
-.facts div { border-left: 2px solid var(--rule); padding-left: 9px; }
-.facts dt {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--dim);
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 18px; }
+.facts div {
+  background: #f7f8fc;
+  border-radius: 12px;
+  padding: 9px 12px;
 }
-.facts dd { margin: 2px 0 0; font-size: 14px; font-variant-numeric: tabular-nums; }
-.spark { width: 100%; height: 44px; display: block; }
+.facts dt {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.facts dd { margin: 3px 0 0; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.spark { width: 100%; height: 52px; display: block; }
 .spark--empty { color: var(--dim); font-size: 12px; height: auto; }
-.spark-line { fill: none; stroke: var(--bone); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
-.spark-target { stroke: var(--watch); stroke-width: 1; stroke-dasharray: 3 4; vector-effect: non-scaling-stroke; }
+.spark-fill { fill: var(--blue-soft); stroke: none; }
+.spark-line { fill: none; stroke: var(--blue); stroke-width: 2.25; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.spark-target { stroke: var(--watch); stroke-width: 1.25; stroke-dasharray: 3 4; vector-effect: non-scaling-stroke; }
 .dot--good { fill: var(--good); }
 .dot--watch { fill: var(--watch); }
 .meta {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 11px;
-  color: var(--dim);
-  margin: 10px 0 0;
+  font-size: 11.5px;
+  color: var(--faint);
+  margin: 12px 0 0;
 }
-footer { color: var(--dim); font-size: 12px; margin-top: 26px; }
-@media (max-width: 380px) { .facts { grid-template-columns: 1fr; } }
+footer {
+  color: var(--dim);
+  font-size: 12px;
+  margin-top: 6px;
+  padding: 20px 4px 0;
+}
+@media (max-width: 380px) { .facts { grid-template-columns: 1fr; } .price { font-size: 34px; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 """
 
@@ -255,17 +319,20 @@ def main():
 <title>Fare board &middot; Bengaluru to Milan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap" rel="stylesheet">
 <style>{STYLES}</style>
 </head>
 <body>
+<div class="topbar"></div>
 <div class="wrap">
   <header class="masthead">
     <h1>Bengaluru &rarr; Milan</h1>
     <p>Business class hunt &middot; travel window {config["window_start"]} to {config["window_end"]}
        &middot; <span class="countdown">{days_left} days out</span></p>
   </header>
+  <div class="board">
   {cards}
+  </div>
   <footer>
     Built {stamp}. Prices in {config["currency"]}, cheapest seen per route.
     Dashed line marks your target. Always reconfirm on the airline's own site before booking.
