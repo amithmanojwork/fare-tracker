@@ -52,3 +52,5 @@ checked_at,route_id,probe_type,outbound_date,return_date,price,airlines,stops,du
 2026-09-20T01:48:34+00:00,blr_mxp_bid,rotating,2027-03-19,2027-04-02,44565,Gulf Air,1,800,,,
 2026-09-20T01:48:38+00:00,blr_mxp_bid,recheck,2027-03-20,2027-04-03,44565,Gulf Air,1,800,,,
 2026-09-21T01:49:50+00:00,blr_mxp_bid,rotating,2027-03-20,2027-04-03,44565,Gulf Air,1,800,,,
+2026-09-22T01:48:20+00:00,blr_mxp_bid,rotating,2027-03-26,2027-04-09,44597,Gulf Air,1,800,,,
+2026-09-22T01:48:24+00:00,blr_mxp_bid,recheck,2027-03-20,2027-04-03,44597,Gulf Air,1,800,,,
