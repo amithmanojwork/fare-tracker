@@ -93,3 +93,4 @@ checked_at,route_id,probe_type,outbound_date,return_date,price,airlines,stops,du
 2026-10-13T08:25:19+00:00,blr_mxp_bid,recheck,2027-03-20,2027-04-03,60842,Akasa Air / Etihad,1,775,,,
 2026-10-14T06:41:15+00:00,blr_mxp_bid,rotating,2027-03-19,2027-04-02,60512,Akasa Air / Etihad,1,775,,,
 2026-10-14T06:41:19+00:00,blr_mxp_bid,recheck,2027-03-20,2027-04-03,60512,Akasa Air / Etihad,1,775,,,
+2026-10-15T06:25:51+00:00,blr_mxp_bid,rotating,2027-03-20,2027-04-03,60309,Akasa Air / Etihad,1,775,,,
