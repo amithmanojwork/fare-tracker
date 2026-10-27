@@ -18,14 +18,14 @@
     }
   },
   "cursor": {
-    "blr_fco_biz": 69,
-    "blr_mxp_bid": 69,
-    "blr_mxp_biz": 69,
-    "blr_zrh_biz": 69
+    "blr_fco_biz": 70,
+    "blr_mxp_bid": 70,
+    "blr_mxp_biz": 70,
+    "blr_zrh_biz": 70
   },
   "last_alert": {
     "blr_fco_biz": "2026-08-27T13:06:00.876372+00:00",
-    "blr_mxp_bid": "2026-10-24T06:27:19.480776+00:00",
+    "blr_mxp_bid": "2026-10-27T06:49:28.321409+00:00",
     "blr_mxp_biz": "2026-08-27T13:05:54.827714+00:00",
     "blr_zrh_biz": "2026-08-27T13:06:02.706901+00:00"
   }
