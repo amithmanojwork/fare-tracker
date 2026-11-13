@@ -143,3 +143,5 @@ checked_at,route_id,probe_type,outbound_date,return_date,price,airlines,stops,du
 2026-11-11T08:22:12+00:00,blr_mxp_bid,rotating,2027-03-19,2027-04-02,58901,Oman Air / SWISS,2,2190,,,
 2026-11-11T08:22:18+00:00,blr_mxp_bid,recheck,2027-03-20,2027-04-03,59623,Gulf Air,1,1810,,,
 2026-11-12T08:49:46+00:00,blr_mxp_bid,rotating,2027-03-20,2027-04-03,63142,Akasa Air / Etihad,1,1505,,,
+2026-11-13T08:44:25+00:00,blr_mxp_bid,rotating,2027-03-26,2027-04-09,59274,Etihad,1,1490,,,
+2026-11-13T08:44:30+00:00,blr_mxp_bid,recheck,2027-03-20,2027-04-03,63164,Akasa Air / Etihad,1,1505,,,
