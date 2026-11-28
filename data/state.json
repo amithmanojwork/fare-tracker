@@ -18,10 +18,10 @@
     }
   },
   "cursor": {
-    "blr_fco_biz": 101,
-    "blr_mxp_bid": 101,
-    "blr_mxp_biz": 101,
-    "blr_zrh_biz": 101
+    "blr_fco_biz": 102,
+    "blr_mxp_bid": 102,
+    "blr_mxp_biz": 102,
+    "blr_zrh_biz": 102
   },
   "last_alert": {
     "blr_fco_biz": "2026-08-27T13:06:00.876372+00:00",

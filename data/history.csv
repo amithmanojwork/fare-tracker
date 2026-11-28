@@ -170,3 +170,4 @@ checked_at,route_id,probe_type,outbound_date,return_date,price,airlines,stops,du
 2026-11-26T10:01:50+00:00,blr_mxp_bid,recheck,2027-03-20,2027-04-03,61250,Gulf Air,1,800,,,
 2026-11-27T10:07:24+00:00,blr_mxp_bid,rotating,2027-03-19,2027-04-02,56402,Akasa Air / Etihad,1,775,,,
 2026-11-27T10:07:31+00:00,blr_mxp_bid,recheck,2027-03-20,2027-04-03,62555,Akasa Air / Etihad,1,1505,,,
+2026-11-28T09:26:08+00:00,blr_mxp_bid,rotating,2027-03-20,2027-04-03,63417,Gulf Air,1,800,,,
